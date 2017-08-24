@@ -5,7 +5,7 @@ Author:
 Version:
 '''
 
-class node(object):
+class className(object):
     """docstring for this class """
     # Constructor
     def __init__(self):
