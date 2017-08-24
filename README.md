@@ -1,2 +1,2 @@
 # OpMEs
-Optimization Made Easy
+Optimization Made E'sy
