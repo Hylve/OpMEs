@@ -1,16 +1,25 @@
+#!/usr/bin/python3
 '''
 Name: nodeModule.py
 Desc: The node class
 Author: Chris[ecn@ecn.se],
-Version: 0.0.0.1
+Version: 0.0.0.2
 '''
 
 class node(object):
-    """docstring for this class """
+    """
+    docstring for this class
+        Attributes:
+            id:
+            namedescription:
+            type:
+            inGoingFlows:
+            outGoingFlows:
+    """
     # Constructor
-    def __init__(self, id, name,type,inGoingFlows,outGoingFlows):
+    def __init__(self, id, namedescription,type,inGoingFlows,outGoingFlows):
         self.nodeId = id
-        self.nodeName = name
+        self.nodeName = namedescription
         self.nodeType= type
         self.nodeInFlows = inGoingFlows
         self.nodeOutFlows = outGoingFlows
@@ -31,11 +40,11 @@ class node(object):
     def changeName(self, newName):
         self.nodeName = newName
     def addInFlow(self, inFlowToAdd):
-        self.nodeInFlows.append(inFlowToAdd);
+        self.nodeInFlows.append(inFlowToAdd)
     def addOutFlow(self, outFlowToAdd):
-        self.nodeOutFlows.append(outFlowToAdd);
-
-
+        self.nodeOutFlows.append(outFlowToAdd)
+    # remove inflow function
+    # remove outflow function
 
     def __str__(self):
         '''
@@ -54,8 +63,7 @@ class node(object):
         return self.nodeId+";"+self.nodeName+";"+self.nodeType+";"+inFlowstr+outFlowstr
 
 def main():
-    # Nothing here will be run.
-
+    pass
 
 if __name__ == '__main__':
     main()
