@@ -21,7 +21,6 @@ class flowClass(object):
     flowClass.flowsDict[flowId].getFlowName()
     """
 
-
     flowsDict = {} # a dictionary that stores all flow instances
     deletedFlowsList = [] # a list that contains all deleted flow IDs
 
@@ -45,13 +44,13 @@ class flowClass(object):
         cls.deletedFlowsList.append(flowId) # append the the deleted flow id to the list of deleted flows.
 
     def __init__(self,flowId,flowType,flowSource,flowDestination):
-        self.flowId             = flowId
-        self.flowType           = flowType
-        self.flowName           = "flow-"+str(self.flowId)
-        self.flowNickname       = self.flowType+"-"+str(self.flowId)
+        self.flowId             = flowId                                # set flow ID.
+        self.flowType           = flowType                              # set flow type.
+        self.flowName           = "flow-"+str(self.flowId)              # set default flow name to "flow-flowId".
+        self.flowNickname       = self.flowType+"-"+str(self.flowId)    # set flow nickname to "flowType-flowId".
         # Below should be in subclasses?
-        self.flowDestination    = flowDestination
-        self.flowSource         = flowSource
+        self.flowDestination    = flowDestination                       # set flow destination node ID.
+        self.flowSource         = flowSource                            # set flow source node ID.
 
     def __repr__(self):
         ''' repr '''
@@ -75,8 +74,6 @@ class flowClass(object):
     # Mutator methods (Setters)
     def changeFlowName (self, newFlowName):
         self.flowName = newFlowName
-
-
 
 class intFlow(flowClass):
     pass

@@ -13,14 +13,21 @@ class constraintsClass(object):
     constraintsDict = {}
     possibleConstraints = {'Equals':'=','GreaterThan':'>','LessThan':'<','GreaterOrEqual':'>=','LessOrEqual':'<='}
     # Constructor
-    def __init__(self):
+    @classmethod
+    def createConstraint(cls,nodeId,flowId,constraintType):
         pass
+    def __init__(self,nodeId,flowId,constraintType):
+        self.nodeId         = nodeId
+        self.flowId         = flowId
+        self.constraintType = constraintType
 
     # Accessers methods (Getters)
-
+    def getConstraint(self):
+        pass
 
     # Mutator methods (Setters)
 def main():
+    print("You are in constraintsClass.py")
     print(constraintsClass.possibleConstraints)
 if __name__ == '__main__':
     main()

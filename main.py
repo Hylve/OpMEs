@@ -21,6 +21,9 @@ def createNodeFunction(nodeType):
     createNodeFunction("TYPE"), where TYPE is NODE,SOURCE or DESTINATION
     '''
     try:
+        if nodeType not in ["SOURCE","DESTINATION","NODE"]:
+            raise ValueError("Not a correct node type")
+
         nodeClass.createNode(nodeType)
     except Exception as e:
         raise
@@ -32,6 +35,9 @@ def createFlowFunction(flowType,flowSource, flowDestination):
     Used classes in function: nodeClass, flowClass.
     '''
     try:
+        if flowType not in ["INT","FLT"]:
+            raise ValueError("Not a correct flow type.")
+
         flow,flowId = flowClass.createFlow(flowType, flowSource,flowDestination)    # create flow
         nodeClass.nodesDict[flowDestination].addInFlow(flowId)                      # add flow to destination node
         nodeClass.nodesDict[flowSource].addOutFlow(flowId)                          # add flow to source node
