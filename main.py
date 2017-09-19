@@ -8,9 +8,9 @@ Desc:
 #
 import sys              # To get the current pythonverion
 #
-from nodeClass import nodeClass                 # import the node class
-from flowClass import flowClass                 # import the flow class
-from constraintsClass import constraintsClass   # import the constraints class
+from classes.nodeClass import nodeClass                 # import the node class
+from classes.flowClass import flowClass                 # import the flow class
+from classes.constraintsClass import constraintsClass   # import the constraints class
 
 ''' Functions '''
 def createNodeFunction(nodeType):
