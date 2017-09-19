@@ -2,7 +2,7 @@
 '''
 Name: nodeClass.py
 Devs: Chris [ecn@ecn.se],
-Version: 0.0.0.6
+Version: 0.0.0.7
 Desc:
 '''
 class nodeClass(object):
@@ -26,15 +26,15 @@ class nodeClass(object):
         nodeClass.nodesDict[nodeId].changeName("New name") |
 
     """
-    nodesDict = {} # a dictionary that stores all node instances
-    deletedNodesList = [] # a list that contains all deleted node IDs
+    nodesDict = {}          # a dictionary that stores all node instances
+    deletedNodesList = []   # a list that contains all deleted node IDs
 
     @classmethod
     def createNode(cls,nodeType):
         ''' this class method dynamically creates instances (new nodes) '''
         if not cls.deletedNodesList: # if there is no deleted nodes
-            nodeId=len(nodeClass.nodesDict)
-        else: #if there is deleted nodes
+            nodeId=len(nodeClass.nodesDict) # set node ID to the lenght to of the node dictionar
+        else: # if there is deleted nodes
             cls.deletedNodesList.sort() #sort the list
             nodeId=cls.deletedNodesList[0] # set node id to the lowest ID (first in sorted)
             cls.deletedNodesList.pop(0) #remove first item in list
@@ -55,19 +55,19 @@ class nodeClass(object):
         self.nodeId         = nodeId
         self.nodeName       = "NODE-"+str(self.nodeId)
         # Move below to subclasses?
-        self.nodeType       = nodeType # is this needed here?
-        self.inGoingFlows   = None # node node, destination node
-        self.outGoingFlows  = None # node node, source node
-        self.constraints    = None # node node
-        self.cost           = None
-        if nodeType == "NODE":
+        self.nodeType       = nodeType  # is this needed here?
+        self.inGoingFlows   = None      # node node, destination node
+        self.outGoingFlows  = None      # node node, source node
+        self.constraints    = None      # node node
+        self.cost           = None      # destination node, source node
+        if nodeType == "NODE": # If the node type is "NODE"
             self.inGoingFlows   = []
             self.outGoingFlows  = []
             self.constraints    = []
-        elif nodeType == "SOURCE":
+        elif nodeType == "SOURCE": # if the node type is source
             self.outGoingFlows  = []
             self.cost =[]
-        elif nodeType == "DESTINATION":
+        elif nodeType == "DESTINATION": # if the node type is destination
             self.inGoingFlows  = []
             self.cost =[]
 
@@ -91,6 +91,8 @@ class nodeClass(object):
         return self.inGoingFlows
     def getOutFlows(self):
         return self.outGoingFlows
+    def getCosts(self):
+        return self.cost
     # Mutator methods (Setters)
     def changeName(self, newName):
         self.nodeName = newName

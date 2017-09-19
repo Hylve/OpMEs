@@ -2,18 +2,19 @@
 '''
 Name: main.py
 Devs: Chris [ecn@ecn.se],
-Version: 0.0.0.6
+Version: 0.0.0.7
 Desc:
 '''
+#
 import sys              # To get the current pythonverion
-
-from nodeClass import nodeClass
-from flowClass import flowClass
-
+#
+from nodeClass import nodeClass                 # import the node class
+from flowClass import flowClass                 # import the flow class
+from constraintsClass import constraintsClass   # import the constraints class
 
 ''' Functions '''
 def createNodeFunction(nodeType):
-    # IS THIS NEEDED?
+    # IS THIS FUNCTION NEEDED?
     '''
     docs for function
     -----------------
@@ -21,39 +22,45 @@ def createNodeFunction(nodeType):
     '''
     try:
         nodeClass.createNode(nodeType)
-
     except Exception as e:
         raise
 
 def createFlowFunction(flowType,flowSource, flowDestination):
-    ''' docs for function '''
+    '''
+    docs for createFlowFunction: This function creates a new flow and append it to the connected nodes.
+
+    Used classes in function: nodeClass, flowClass.
+    '''
     try:
-        flow,flowId = flowClass.createFlow(flowType, flowSource,flowDestination) # create flow
-        nodeClass.nodesDict[flowDestination].addInFlow(flowId) # add flow to destination node
-        nodeClass.nodesDict[flowSource].addOutFlow(flowId) # add flow to source node
+        flow,flowId = flowClass.createFlow(flowType, flowSource,flowDestination)    # create flow
+        nodeClass.nodesDict[flowDestination].addInFlow(flowId)                      # add flow to destination node
+        nodeClass.nodesDict[flowSource].addOutFlow(flowId)                          # add flow to source node
     except Exception as e:
         raise
 
 def deleteNodeFunction(nodeId):
-    ''' docs for function '''
+    '''
+    docs for deleteNodeFunction: This function deletes a node and all flow that is connected to the node.
+
+    Used classes in function: nodeClass, flowClass.
+    '''
     try:
-        allFlows = [] # empty list of all flows in the node
-        nodesToDeleteIngoingFlows = {} # create empty dict for nodes that needs to remove ingoing flows from
+        allFlows = []                   # empty list of all flows in the node
+        nodesToDeleteIngoingFlows = {}  # create empty dict for nodes that needs to remove ingoing flows from
         nodesToDeleteOutgoingFlows = {} # create empty dict for nodes that needs to remove outgoing flows from
 
         if nodeClass.nodesDict[nodeId].getInFlows() is not None: # if the node type is not a "SOURCE"
             for item in nodeClass.nodesDict[nodeId].getInFlows():
                 allFlows.append(item)
 
-        if nodeClass.nodesDict[nodeId].getOutFlows() is not None:  #if the node type is not a "DESTINATION"
+        if nodeClass.nodesDict[nodeId].getOutFlows() is not None:  # if the node type is not a "DESTINATION"
             for item in nodeClass.nodesDict[nodeId].getOutFlows():
                 allFlows.append(item)
 
         for flowId in allFlows:
-
-            nodesToDeleteIngoingFlows[flowClass.flowsDict[flowId].getFlowDestination()]=flowId # get the ID of the destination node
-            nodesToDeleteOutgoingFlows[flowClass.flowsDict[flowId].getFlowSource()]=flowId # get the ID of the source node
-            flowClass.deleteFlow(flowId) # delete flow
+            nodesToDeleteIngoingFlows[flowClass.flowsDict[flowId].getFlowDestination()]=flowId  # get the ID of the destination node
+            nodesToDeleteOutgoingFlows[flowClass.flowsDict[flowId].getFlowSource()]=flowId      # get the ID of the source node
+            flowClass.deleteFlow(flowId)                                                        # delete flow
 
         for nodeIdIn, flowIdIn in nodesToDeleteIngoingFlows.items():
             nodeClass.nodesDict[nodeIdIn].deleteInFlow(flowIdIn) # Remove Destinationflows from NODES that are connected to the flow ID
@@ -61,21 +68,26 @@ def deleteNodeFunction(nodeId):
         for nodeIdOut, flowIdOut in nodesToDeleteOutgoingFlows.items():
             nodeClass.nodesDict[nodeIdOut].deleteOutFlow(flowIdOut) # Remove Ingoingflows from NODES that are connected to the flow ID
 
-        nodeClass.deleteNode(nodeId) # delete node
+        nodeClass.deleteNode(nodeId) # delete the node
 
     except Exception as e:
         raise
 def deleteFlowFunction(flowId):
+    '''
+    docs for deleteFlowFunction:
+
+    Used classes in function: nodeClass, flowClass.
+    '''
     try:
-        nodeClass.nodesDict[flowClass.flowsDict[flowId].getFlowDestination()].deleteInFlow(flowId) # delete flow in destination node
-        nodeClass.nodesDict[flowClass.flowsDict[flowId].getFlowSource()].deleteOutFlow(flowId) # delete flow in source node
-        flowClass.deleteFlow(flowId) # delete flow
+        nodeClass.nodesDict[flowClass.flowsDict[flowId].getFlowDestination()].deleteInFlow(flowId)  # delete flow in destination node
+        nodeClass.nodesDict[flowClass.flowsDict[flowId].getFlowSource()].deleteOutFlow(flowId)      # delete flow in source node
+        flowClass.deleteFlow(flowId)                                                                # delete flow
     except Exception as e:
         raise
 
 def main():
-    problem_name = 'Name' # Name of the problem we want to solve'
-    print ("Python version: "+str(sys.version_info[0:4])) # Prints the current python version
+    problem_name = 'Name'                                   # Name of the problem we want to solve'
+    print ("Python version: "+str(sys.version_info[0:4]))   # Prints the current python version
 
     # EXAMPLES HOW TO USE THE CLASSES READ MORE IN DOCSTRING FOR CLASS:
 

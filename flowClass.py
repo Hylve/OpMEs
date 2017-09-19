@@ -2,7 +2,7 @@
 '''
 Name: flowClass.py
 Devs: Chris [ecn@ecn.se],
-Version: 0.0.0.6
+Version: 0.0.0.7
 Desc:
 '''
 class flowClass(object):
@@ -28,36 +28,34 @@ class flowClass(object):
     @classmethod
     def createFlow(cls,flowType, flowSource,flowDestination):
         ''' this class method dynamically creates instances (new flows) '''
-        if not cls.deletedFlowsList:
-            flowId=len(flowClass.flowsDict) # use a better implementation of an flow ID. What happens if a flow is deleted.
-        else:
-            cls.deletedFlowsList.sort()
-            flowId=cls.deletedFlowsList[0]
-            cls.deletedFlowsList.pop(0)
+        if not cls.deletedFlowsList: # if deleted flow exists
+            flowId=len(flowClass.flowsDict) # set flow ID.
+        else: # if no deleted flow exists
+            cls.deletedFlowsList.sort()     # sort the list of deleted flows ids
+            flowId=cls.deletedFlowsList[0]  # get the first item in the sorted list and set it to flow id
+            cls.deletedFlowsList.pop(0)     # remove the first entry from list
 
         flow=flowClass(flowId,flowType, flowSource,flowDestination) # create instance
         cls.flowsDict[flowId]=flow # append instance to dictionary
         return flow, flowId
 
-
     @classmethod
     def deleteFlow(cls,flowId):
-        cls.flowsDict.pop(flowId,None)
+        cls.flowsDict.pop(flowId,None) # delete flow instance from flow dictionary
+        cls.deletedFlowsList.append(flowId) # append the the deleted flow id to the list of deleted flows.
 
     def __init__(self,flowId,flowType,flowSource,flowDestination):
         self.flowId             = flowId
         self.flowType           = flowType
         self.flowName           = "flow-"+str(self.flowId)
         self.flowNickname       = self.flowType+"-"+str(self.flowId)
-        # Below should be in subclasses
+        # Below should be in subclasses?
         self.flowDestination    = flowDestination
         self.flowSource         = flowSource
 
     def __repr__(self):
-        '''
-
-        '''
-        return "flowClass('{}','{}','{}','{}','{}')".format(self.flowId, self.flowType, self.flowName,self.flowDestination, self.flowSource)
+        ''' repr '''
+        return "flowClass('{}','{}','{}','{}','{}','{}')".format(self.flowId, self.flowType, self.flowName, self.flowNickname,self.flowDestination, self.flowSource)
 
     # Accessers methods (Getters)
     def getFlowData (self):
@@ -66,15 +64,14 @@ class flowClass(object):
         return self.flowId
     def getFlowType (self):
         return self.flowType
+    def getFlowNickname (self):
+        return self.flowNickname
     def getFlowName (self):
         return self.flowName
     def getFlowDestination (self):
         return self.flowDestination
     def getFlowSource (self):
         return self.flowSource
-    def getFlowSrcAndDest (self):
-        return self.flowDestination,self.flowSource
-
     # Mutator methods (Setters)
     def changeFlowName (self, newFlowName):
         self.flowName = newFlowName
