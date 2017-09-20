@@ -34,6 +34,10 @@ class nodeClass(object):
         ''' this class method dynamically creates instances (new nodes) '''
         if not cls.deletedNodesList: # if there is no deleted nodes
             nodeId=len(nodeClass.nodesDict) # set node ID to the lenght to of the node dictionar
+            #if (len(nodeClass.nodesDict) == 0):
+            #    nodeId = 1
+            #else:
+            #    nodeId=len(nodeClass.nodesDict) # set node ID to the lenght to of the node dictionar
         else: # if there is deleted nodes
             cls.deletedNodesList.sort() #sort the list
             nodeId=cls.deletedNodesList[0] # set node id to the lowest ID (first in sorted)
@@ -45,7 +49,7 @@ class nodeClass(object):
 
     @classmethod
     def deleteNode(cls,nodeId):
-        ''' this class method delete an existing node '''
+        ''' this class method delete an existing node instance in the dictionary that stores all the instances. '''
         cls.nodesDict.pop(nodeId,None) # Delete the nod
         cls.deletedNodesList.append(nodeId) # Append the deleted nodes ID to a list
 
@@ -72,7 +76,6 @@ class nodeClass(object):
 
 
     def __repr__(self):
-        # re-define builtin repr.
         return "nodeClass('{}','{}','{}','{}','{}','{}','{}')".format(self.nodeId, self.nodeName, self.nodeType,self.inGoingFlows, self.outGoingFlows, self.constraints, self.cost)
 
     # Accessers methods (Getters)
@@ -94,6 +97,8 @@ class nodeClass(object):
     # Mutator methods (Setters)
     def changeName(self, newName):
         self.nodeName = newName
+    def changeNameToDefault(self):
+        self.nodeName = "NODE-"+str(self.nodeId)
     def addInFlow(self, inFlowToAdd):
         self.inGoingFlows.append(inFlowToAdd)
     def addOutFlow(self, outFlowToAdd):

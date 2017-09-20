@@ -12,11 +12,10 @@ from classes.nodeClass import nodeClass                 # import the node class
 from classes.flowClass import flowClass                 # import the flow class
 from classes.constraintsClass import constraintsClass   # import the constraints class
 
-''' Functions '''
 def createNodeFunction(nodeType):
     # IS THIS FUNCTION NEEDED?
     '''
-    docs for function
+    docs for createNodeFunction:
     -----------------
     createNodeFunction("TYPE"), where TYPE is NODE,SOURCE or DESTINATION
     '''
@@ -30,7 +29,7 @@ def createNodeFunction(nodeType):
 
 def createFlowFunction(flowType,flowSource, flowDestination):
     '''
-    docs for createFlowFunction: This function creates a new flow and append it to the connected nodes.
+    docs for createFlowFunction: This function creates a new flow and append the flow to the connected nodes.
 
     Used classes in function: nodeClass, flowClass.
     '''
@@ -127,6 +126,8 @@ def main():
     createFlowFunction("INT", 0, 1) # create a now flow with the assigned ID #0
     print(nodeClass.nodesDict)
     print(flowClass.flowsDict)
+
+    #print(nodeClass.__doc__)
 
 
 if __name__ == '__main__':
