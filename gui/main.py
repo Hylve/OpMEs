@@ -9,7 +9,7 @@ class MyFirstGUI(tk.Frame):
         #wtf?
         super(MyFirstGUI, self).__init__()
 
-        self.tempNode = ""
+        self.tempNode = None
 
 
         self.master = master
@@ -25,53 +25,52 @@ class MyFirstGUI(tk.Frame):
         self.leftFrame.pack(fill="y", side="left")
 
         self.canvas = tk.Canvas(root, name="canvas", width=500, height=400, bg="darkgray")
-        self.canvas.bind('<Enter>', self.check)
+        self.canvas.bind('<Enter>', lambda event, check = 1: self.enter(event, check))
         self.canvas.pack(fill="both", expand=1, side="right")
 
         self.createWidgets()
 
-
-    def check(self, event):
-        """This function is only for sending check to self.enter"""
-        self.enter(event, check=1)
-
     def enter(self, event, check):
-        if (check == 1):
+        if (check == 1 and self.tempNode != None):
+            canvasX = self.tempX - 110
+            canvasY = self.tempY - 20
             canvas = event.widget
-            print(root.winfo_pointerx() - root.winfo_rootx())
-            print(root.winfo_pointerx() - root.winfo_rootx())
-            #x = canvas.canvasx(self.tempX) - root.winfo_pointerx()
-            #y = canvas.canvasy(self.tempY) - root.winfo_pointery()
-            #x = canvas.canvasx(event.x)
-            #y = canvas.canvasy(event.y)
-            #print("Placed node at",x,y)
-        self.tempNode = ""
+            canvas.create_oval(canvasX-20, canvasY-20, canvasX+20, canvasY+20, fill=self.color)
+        self.tempNode == None
 
-    def nodeDrop(self, event):
+
+    def nodeDrop(self, event, node, color):
         self.tempX = root.winfo_pointerx() - root.winfo_rootx()
         self.tempY = root.winfo_pointery() - root.winfo_rooty()
-        print("tempX",self.tempX)
-        print("tempY",self.tempY)
+        if not(self.tempY < 20 or self.tempY > 380 or self.tempX < 110 or self.tempX > 600):
+            self.check = 1
+            self.color = color
+            self.tempNode = node
+            print("node name:", node)
+        else:
+            self.check = 0
 
     def addNode(self,event):
         nodesWindow = tk.Toplevel(self)
         nodesWindow.wm_title("New Node")
 
         node = tk.Button(nodesWindow, text = "Node")
-        node.bind('<ButtonRelease-1>', self.nodeDrop)
+        node.bind('<ButtonRelease-1>', lambda event, node="normal", color="blue": self.nodeDrop(event, node, color))
         node.grid(padx = 3, pady = 2,
                         row = 0, column = 0,
                         sticky = "NW"
                         )
 
-        srcNode = tk.Button(nodesWindow,
-            text = "Source Node").grid(padx = 3, pady = 2,
+        srcNode = tk.Button(nodesWindow, text = "Source Node")
+        srcNode.bind('<ButtonRelease-1>', lambda event, node="source", color="red": self.nodeDrop(event, node, color))
+        srcNode.grid(padx = 3, pady = 2,
                             row = 1, column = 0,
                             sticky = "NW"
                             )
 
-        destNode = tk.Button(nodesWindow,
-            text = "Destination Node").grid(padx = 3, pady = 2,
+        destNode = tk.Button(nodesWindow, text = "Destination Node")
+        destNode.bind('<ButtonRelease-1>', lambda event, node="destination",color="green": self.nodeDrop(event, node, color))
+        destNode.grid(padx = 3, pady = 2,
                             row = 2, column = 0,
                             sticky = "NW"
                             )
