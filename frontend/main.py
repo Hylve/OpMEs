@@ -79,7 +79,7 @@ class MyFirstGUI(tk.Frame):
     def enter(self, event, check):
         if (check == 1 and self.tempNode != None):
             canvas = event.widget
-            path = '/home/dennis/Documents/Github/OpMEs/gui/images/' + self.tempNode + '.png'
+            path = './frontend/images/' + self.tempNode + '.png'
             self.photo = tk.PhotoImage(file = path)
             canvas.create_image(event.x, event.y, image = self.photo, tags = self.tempCounter)
             #canvas.create_oval(event.x-20, event.y-20, event.x+20, event.y+20, fill=self.color, tag=self.tempCounter)
