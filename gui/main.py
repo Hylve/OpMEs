@@ -1,15 +1,14 @@
 #!/usr/bin/python3
 import tkinter as tk
-from dnd import DragManager
-
 
 class MyFirstGUI(tk.Frame):
     def __init__(self, master):
-
         #wtf?
         super(MyFirstGUI, self).__init__()
-
+        self.movement = 0
+        self.tempCounter=1
         self.tempNode = None
+        self.nodeMenu = None
 
 
         self.master = master
@@ -24,34 +23,81 @@ class MyFirstGUI(tk.Frame):
         self.leftFrame = tk.Frame(root, height=400, width=200, bg="gray")
         self.leftFrame.pack(fill="y", side="left")
 
+
         self.canvas = tk.Canvas(root, name="canvas", width=500, height=400, bg="darkgray")
         self.canvas.bind('<Enter>', lambda event, check = 1: self.enter(event, check))
+        #self.canvas.bind('<B3-Motion>', self.moveCanvas)
+        self.canvas.bind('<Button-3>', self.displayNodeMenu)
+        self.canvas.bind('<ButtonRelease-1>', self.setMovement)
         self.canvas.pack(fill="both", expand=1, side="right")
-
         self.createWidgets()
+
+    #def moveCanvas(self, event):
+
+
+    def setMovement(self, event):
+        if self.movement == 1:
+            print("The node was moved to:",event.x, event.y)
+            self.canvas.unbind('<B1-Motion>')
+            self.movement = 0
+
+    def displayNodeMenu(self, event):
+        if (self.nodeMenu != None):
+            self.nodeMenu.destroy()
+        try:
+            nodeID = event.widget.gettags("current")[0]
+        except:
+            print("There is nothing there, add an object.")
+        else:
+            self.nodeMenu = tk.Menu(self.canvas, tearoff=0)
+            self.nodeMenu.add_command(label="Move node", command=lambda: self.moveClick(nodeID))
+            self.nodeMenu.add_command(label="Edit node", command=lambda: self.editNode(nodeID))
+            self.nodeMenu.add_command(label="Delete node", command=lambda: self.deleteNode(nodeID))
+            x = root.winfo_pointerx()# - root.winfo_rootx()
+            y = root.winfo_pointery()# - root.winfo_rooty()
+            self.nodeMenu.post(x, y)
+
+    def moveClick(self, nodeID):
+        self.canvas.bind('<B1-Motion>', lambda event: self.moveNode(event, nodeID))
+        self.movement = 1
+
+    def moveNode(self, event, nodeID):
+        obj = event.widget.gettags("current")[0]
+        if obj == nodeID:
+            newX = event.x - self.tempX
+            newY = event.y - self.tempY
+            self.canvas.move(nodeID, newX, newY)
+            self.tempX = event.x
+            self.tempY = event.y
+
+    def editNode(self, nodeID):
+        print("EDIT ---:",nodeID)
+
+    def deleteNode(self, nodeID):
+        print("nodeType is:",nodeID)
+        self.canvas.delete(nodeID)
 
     def enter(self, event, check):
         if (check == 1 and self.tempNode != None):
-            canvasX = self.tempX - 110
-            canvasY = self.tempY - 20
             canvas = event.widget
-            canvas.create_oval(canvasX-20, canvasY-20, canvasX+20, canvasY+20, fill=self.color)
-        self.tempNode == None
+            canvas.create_oval(event.x-20, event.y-20, event.x+20, event.y+20, fill=self.color, tag=self.tempCounter)
+            self.tempCounter += 1
+        self.tempNode = None
 
 
     def nodeDrop(self, event, node, color):
-        self.tempX = root.winfo_pointerx() - root.winfo_rootx()
-        self.tempY = root.winfo_pointery() - root.winfo_rooty()
-        if not(self.tempY < 20 or self.tempY > 380 or self.tempX < 110 or self.tempX > 600):
+        self.tempX = root.winfo_pointerx() - root.winfo_rootx()-110  #this is the width of self.leftFrame.
+        self.tempY = root.winfo_pointery() - root.winfo_rooty()-20 #the height of toplabel
+        if not(self.tempY < 0 or self.tempY > 360 or self.tempX < 0 or self.tempX > 490):
             self.check = 1
             self.color = color
             self.tempNode = node
-            print("node name:", node)
         else:
             self.check = 0
 
     def addNode(self,event):
         nodesWindow = tk.Toplevel(self)
+        nodesWindow.resizable(width=False, height=False)
         nodesWindow.wm_title("New Node")
 
         node = tk.Button(nodesWindow, text = "Node")
