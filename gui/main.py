@@ -26,14 +26,13 @@ class MyFirstGUI(tk.Frame):
 
         self.canvas = tk.Canvas(root, name="canvas", width=500, height=400, bg="darkgray")
         self.canvas.bind('<Enter>', lambda event, check = 1: self.enter(event, check))
-        #self.canvas.bind('<B3-Motion>', self.moveCanvas)
         self.canvas.bind('<Button-3>', self.displayNodeMenu)
         self.canvas.bind('<ButtonRelease-1>', self.setMovement)
         self.canvas.pack(fill="both", expand=1, side="right")
+        self.canvScrollbar = tk.Scrollbar(self.canvas, orient="vertical", command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=self.canvScrollbar.set)
+        self.canvScrollbar.pack(side="right", fill="y")
         self.createWidgets()
-
-    #def moveCanvas(self, event):
-
 
     def setMovement(self, event):
         if self.movement == 1:
@@ -80,17 +79,19 @@ class MyFirstGUI(tk.Frame):
     def enter(self, event, check):
         if (check == 1 and self.tempNode != None):
             canvas = event.widget
-            canvas.create_oval(event.x-20, event.y-20, event.x+20, event.y+20, fill=self.color, tag=self.tempCounter)
+            path = '/home/dennis/Documents/Github/OpMEs/gui/images/' + self.tempNode + '.png'
+            self.photo = tk.PhotoImage(file = path)
+            canvas.create_image(event.x, event.y, image = self.photo, tags = self.tempCounter)
+            #canvas.create_oval(event.x-20, event.y-20, event.x+20, event.y+20, fill=self.color, tag=self.tempCounter)
             self.tempCounter += 1
         self.tempNode = None
 
 
-    def nodeDrop(self, event, node, color):
+    def nodeDrop(self, event, node):
         self.tempX = root.winfo_pointerx() - root.winfo_rootx()-110  #this is the width of self.leftFrame.
         self.tempY = root.winfo_pointery() - root.winfo_rooty()-20 #the height of toplabel
         if not(self.tempY < 0 or self.tempY > 360 or self.tempX < 0 or self.tempX > 490):
             self.check = 1
-            self.color = color
             self.tempNode = node
         else:
             self.check = 0
@@ -101,21 +102,21 @@ class MyFirstGUI(tk.Frame):
         nodesWindow.wm_title("New Node")
 
         node = tk.Button(nodesWindow, text = "Node")
-        node.bind('<ButtonRelease-1>', lambda event, node="normal", color="blue": self.nodeDrop(event, node, color))
+        node.bind('<ButtonRelease-1>', lambda event, node="normal": self.nodeDrop(event, node))
         node.grid(padx = 3, pady = 2,
                         row = 0, column = 0,
                         sticky = "NW"
                         )
 
         srcNode = tk.Button(nodesWindow, text = "Source Node")
-        srcNode.bind('<ButtonRelease-1>', lambda event, node="source", color="red": self.nodeDrop(event, node, color))
+        srcNode.bind('<ButtonRelease-1>', lambda event, node="source": self.nodeDrop(event, node))
         srcNode.grid(padx = 3, pady = 2,
                             row = 1, column = 0,
                             sticky = "NW"
                             )
 
         destNode = tk.Button(nodesWindow, text = "Destination Node")
-        destNode.bind('<ButtonRelease-1>', lambda event, node="destination",color="green": self.nodeDrop(event, node, color))
+        destNode.bind('<ButtonRelease-1>', lambda event, node="destination": self.nodeDrop(event, node))
         destNode.grid(padx = 3, pady = 2,
                             row = 2, column = 0,
                             sticky = "NW"
