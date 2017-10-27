@@ -92,43 +92,42 @@ def deleteFlowFunction(flowId):
         raise
 
 def main():
-    problem_name = 'Name'                                   # Name of the problem we want to solve'
-    print ("Python version: "+str(sys.version_info[0:4]))   # Prints the current python version
+    # problem_name = 'Name'                                   # Name of the problem we want to solve'
+    # print ("Python version: "+str(sys.version_info[0:4]))   # Prints the current python version
+    #
+    # # EXAMPLES HOW TO USE THE CLASSES READ MORE IN DOCSTRING FOR CLASS:
+    #
+    # print(nodeClass.nodesDict)
+    # print(flowClass.flowsDict)
+    #
+    # createNodeFunction("NODE") # Node#0
+    # createNodeFunction("NODE") # Node#1
+    # createNodeFunction("NODE") # Node#2
+    # createNodeFunction("NODE") # Node#3
+    # createNodeFunction("NODE") # Node#4
+    # print(nodeClass.nodesDict)
+    #
+    # createFlowFunction("INT", 0, 1) # Flow #0
+    # createFlowFunction("INT", 1, 2) # Flow #1
+    # createFlowFunction("INT", 2, 3) # Flow #2
+    # print(nodeClass.nodesDict)
+    # print(flowClass.flowsDict)
+    #
+    #
+    # deleteNodeFunction(2) # delete Node #2
+    # deleteNodeFunction(3) # delete Node #3
+    # print(nodeClass.nodesDict)
+    # print(flowClass.flowsDict)
+    #
+    # createNodeFunction("NODE") # create new node (it's going to be assigned node id 2)
+    # deleteFlowFunction(0) # delete flow #0
+    # print(nodeClass.nodesDict)
+    # print(flowClass.flowsDict)
+    #
+    # createFlowFunction("INT", 0, 1) # create a now flow with the assigned ID #0
+    # print(nodeClass.nodesDict)
+    # print(flowClass.flowsDict)
 
-    # EXAMPLES HOW TO USE THE CLASSES READ MORE IN DOCSTRING FOR CLASS:
-
-    print(nodeClass.nodesDict)
-    print(flowClass.flowsDict)
-
-    createNodeFunction("NODE") # Node#0
-    createNodeFunction("NODE") # Node#1
-    createNodeFunction("NODE") # Node#2
-    createNodeFunction("NODE") # Node#3
-    createNodeFunction("NODE") # Node#4
-    print(nodeClass.nodesDict)
-
-    createFlowFunction("INT", 0, 1) # Flow #0
-    createFlowFunction("INT", 1, 2) # Flow #1
-    createFlowFunction("INT", 2, 3) # Flow #2
-    print(nodeClass.nodesDict)
-    print(flowClass.flowsDict)
-
-
-    deleteNodeFunction(2) # delete Node #2
-    deleteNodeFunction(3) # delete Node #3
-    print(nodeClass.nodesDict)
-    print(flowClass.flowsDict)
-
-    createNodeFunction("NODE") # create new node (it's going to be assigned node id 2)
-    deleteFlowFunction(0) # delete flow #0
-    print(nodeClass.nodesDict)
-    print(flowClass.flowsDict)
-
-    createFlowFunction("INT", 0, 1) # create a now flow with the assigned ID #0
-    print(nodeClass.nodesDict)
-    print(flowClass.flowsDict)
-
-    #print(nodeClass.__doc__)
 
 
 if __name__ == '__main__':
