@@ -7,12 +7,13 @@ Desc:
 '''
 #
 import sys              # To get the current pythonverion
-#
+
 from classes.nodeClass import nodeClass                 # import the node class
 from classes.flowClass import flowClass                 # import the flow class
 from classes.constraintsClass import constraintsClass   # import the constraints class
 
 def createNodeFunction(nodeType):
+    print("work")
     # IS THIS FUNCTION NEEDED?
     '''
     docs for createNodeFunction:
