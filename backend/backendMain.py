@@ -13,7 +13,6 @@ from classes.flowClass import flowClass                 # import the flow class
 from classes.constraintsClass import constraintsClass   # import the constraints class
 
 def createNodeFunction(nodeType):
-    print("work")
     # IS THIS FUNCTION NEEDED?
     '''
     docs for createNodeFunction:
@@ -55,17 +54,17 @@ def deleteNodeFunction(nodeId):
         nodesToDeleteIngoingFlows = {}  # create empty dict for nodes that needs to remove ingoing flows from
         nodesToDeleteOutgoingFlows = {} # create empty dict for nodes that needs to remove outgoing flows from
 
-        if nodeClass.nodesDict[nodeId].getInFlows() is not None: # if the node type is not a "SOURCE"
-            for item in nodeClass.nodesDict[nodeId].getInFlows():
+        if nodeClass.nodesDict[nodeId].inGoingFlows is not None: # if the node type is not a "SOURCE"
+            for item in nodeClass.nodesDict[nodeId].inGoingFlows:
                 allFlows.append(item)
 
-        if nodeClass.nodesDict[nodeId].getOutFlows() is not None:  # if the node type is not a "DESTINATION"
-            for item in nodeClass.nodesDict[nodeId].getOutFlows():
+        if nodeClass.nodesDict[nodeId].outGoingFlows is not None:  # if the node type is not a "DESTINATION"
+            for item in nodeClass.nodesDict[nodeId].outGoingFlows:
                 allFlows.append(item)
 
         for flowId in allFlows:
-            nodesToDeleteIngoingFlows[flowClass.flowsDict[flowId].getFlowDestination()]=flowId  # get the ID of the destination node
-            nodesToDeleteOutgoingFlows[flowClass.flowsDict[flowId].getFlowSource()]=flowId      # get the ID of the source node
+            nodesToDeleteIngoingFlows[flowClass.flowsDict[flowId].flowDestination]=flowId  # get the ID of the destination node
+            nodesToDeleteOutgoingFlows[flowClass.flowsDict[flowId].flowSource]=flowId      # get the ID of the source node
             flowClass.deleteFlow(flowId)                                                        # delete flow
 
         for nodeIdIn, flowIdIn in nodesToDeleteIngoingFlows.items():
@@ -85,48 +84,56 @@ def deleteFlowFunction(flowId):
     Used classes in function: nodeClass, flowClass.
     '''
     try:
-        nodeClass.nodesDict[flowClass.flowsDict[flowId].getFlowDestination()].deleteInFlow(flowId)  # delete flow in destination node
-        nodeClass.nodesDict[flowClass.flowsDict[flowId].getFlowSource()].deleteOutFlow(flowId)      # delete flow in source node
+        nodeClass.nodesDict[flowClass.flowsDict[flowId].flowDestination].deleteInFlow(flowId)  # delete flow in destination node
+        nodeClass.nodesDict[flowClass.flowsDict[flowId].flowSource].deleteOutFlow(flowId)      # delete flow in source node
         flowClass.deleteFlow(flowId)                                                                # delete flow
     except Exception as e:
         raise
 
 def main():
+    #createNodeFunction("NODE") # Node#0
+    #print(nodeClass.nodesDict[0].nodeName)
+    #print(nodeClass.nodesDict[0].inGoingFlows)
+    #print(nodeClass.nodesDict[0].getName())
+    #print(nodeClass.nodesDict[0].nodeName)
+
+
+    #print(nodeClass.nodesDict[0].type)
     # problem_name = 'Name'                                   # Name of the problem we want to solve'
     # print ("Python version: "+str(sys.version_info[0:4]))   # Prints the current python version
     #
     # # EXAMPLES HOW TO USE THE CLASSES READ MORE IN DOCSTRING FOR CLASS:
     #
-    # print(nodeClass.nodesDict)
-    # print(flowClass.flowsDict)
-    #
-    # createNodeFunction("NODE") # Node#0
-    # createNodeFunction("NODE") # Node#1
-    # createNodeFunction("NODE") # Node#2
-    # createNodeFunction("NODE") # Node#3
-    # createNodeFunction("NODE") # Node#4
-    # print(nodeClass.nodesDict)
-    #
-    # createFlowFunction("INT", 0, 1) # Flow #0
-    # createFlowFunction("INT", 1, 2) # Flow #1
-    # createFlowFunction("INT", 2, 3) # Flow #2
-    # print(nodeClass.nodesDict)
-    # print(flowClass.flowsDict)
-    #
-    #
-    # deleteNodeFunction(2) # delete Node #2
-    # deleteNodeFunction(3) # delete Node #3
-    # print(nodeClass.nodesDict)
-    # print(flowClass.flowsDict)
-    #
-    # createNodeFunction("NODE") # create new node (it's going to be assigned node id 2)
-    # deleteFlowFunction(0) # delete flow #0
-    # print(nodeClass.nodesDict)
-    # print(flowClass.flowsDict)
-    #
-    # createFlowFunction("INT", 0, 1) # create a now flow with the assigned ID #0
-    # print(nodeClass.nodesDict)
-    # print(flowClass.flowsDict)
+    print(nodeClass.nodesDict)
+    print(flowClass.flowsDict)
+
+    createNodeFunction("NODE") # Node#0
+    createNodeFunction("NODE") # Node#1
+    createNodeFunction("NODE") # Node#2
+    createNodeFunction("NODE") # Node#3
+    createNodeFunction("NODE") # Node#4
+    print(nodeClass.nodesDict)
+
+    createFlowFunction("INT", 0, 1) # Flow #0
+    createFlowFunction("INT", 1, 2) # Flow #1
+    createFlowFunction("INT", 2, 3) # Flow #2
+    print(nodeClass.nodesDict)
+    print(flowClass.flowsDict)
+
+
+    deleteNodeFunction(2) # delete Node #2
+    deleteNodeFunction(3) # delete Node #3
+    print(nodeClass.nodesDict)
+    print(flowClass.flowsDict)
+
+    createNodeFunction("NODE") # create new node (it's going to be assigned node id 2)
+    deleteFlowFunction(0) # delete flow #0
+    print(nodeClass.nodesDict)
+    print(flowClass.flowsDict)
+
+    createFlowFunction("INT", 0, 1) # create a now flow with the assigned ID #0
+    print(nodeClass.nodesDict)
+    print(flowClass.flowsDict)
 
 
 

@@ -30,7 +30,7 @@ class nodeClass(object):
     deletedNodesList = []   # a list that contains all deleted node IDs
 
     @classmethod
-    def createNode(cls,nodeType, picture=None, x=None, y=None):
+    def createNode(cls, nodeType, picture=None, x=None, y=None):
         ''' this class method dynamically creates instances (new nodes) '''
         if not cls.deletedNodesList: # if there is no deleted nodes
             nodeId=len(nodeClass.nodesDict) # set node ID to the lenght to of the node dictionar
@@ -40,7 +40,7 @@ class nodeClass(object):
             cls.deletedNodesList.pop(0) #remove first item in list
 
 
-        node=nodeClass(nodeId,nodeType, picture, x,y) # createa node instance
+        node=nodeClass(nodeId, nodeType, picture, x, y) # createa node instance
         cls.nodesDict[nodeId]=node # append created instance to dictionary
         return node
 
@@ -51,13 +51,13 @@ class nodeClass(object):
         cls.deletedNodesList.append(nodeId) # Append the deleted nodes ID to a list
 
     # Constructor
-    def __init__(self, nodeId, nodeType, picture, x, y): # add all the inputs in the init method use if statement if the vars is empty
-        self.picture        = picture                   # set node picture.
+    def __init__(self, nodeId, nodeType, picture, x, y):# add all the inputs in the init method use if statement if the vars is empty
         self.nodeId         = nodeId                    # set node ID.
         self.nodeName       = "NODE-"+str(self.nodeId)  # set the default node name to "NODE-nodeID".
         self.yCoord         = y                         # Y coordinate.
         self.xCoord         = x                         # X coordinate.
-        # Move below to subclasses?
+        self.picture        = picture                   # set node picture.
+
         self.nodeType       = nodeType                  # set node type.
         self.inGoingFlows   = None                      # valid for: destination node.
         self.outGoingFlows  = None                      # valid for: source node.
@@ -79,12 +79,19 @@ class nodeClass(object):
         return "nodeClass('{}','{}','{}','{}','{}','{}','{}')".format(self.nodeId, self.nodeName, self.nodeType,self.inGoingFlows, self.outGoingFlows, self.constraints, self.cost)
 
     # Accessers methods (Getters)
+    @property
+    def name(self):
+        return '{}'.format(self.nodeName)
+
+
+
+
     def getAll(self):
         return self.nodeId,self.nodeName,self.nodeType,self.inGoingFlows,self.outGoingFlows
     def getId(self):
         return self.nodeId
     def getName(self):
-        return self.nodeName
+        return '{}'.format(self.nodeName)
     def getType(self):
         return self.nodeType
     def getInFlows(self):
