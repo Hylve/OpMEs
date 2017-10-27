@@ -11,8 +11,8 @@ class MyFirstGUI(tk.Frame):
     def __init__(self, master):
         #wtf?
         super(MyFirstGUI, self).__init__()
+        self.check = 0
         self.movement = 0
-        self.tempCounter= 1
         self.nodeType = None
         self.tempNode = None
         self.nodeMenu = None
@@ -32,17 +32,26 @@ class MyFirstGUI(tk.Frame):
 
 
         self.canvas = tk.Canvas(root, name="canvas", width=500, height=400, bg="darkgray")
-        self.canvas.bind('<Enter>', lambda event, check = 1: self.enter(event, check))
+        self.canvas.bind('<Enter>', self.enter)
         self.canvas.bind('<Button-3>', self.displayNodeMenu)
-        self.canvas.bind('<ButtonRelease-1>', self.setMovement)
+        self.canvas.bind('<ButtonRelease-1>', self.newNodePos)
         self.canvas.pack(fill="both", expand=1, side="right")
         self.createWidgets()
 
-    def setMovement(self, event):
+    def newNodePos(self, event):
         if self.movement == 1:
-            print("The node was moved to:",event.x, event.y)
-            self.canvas.unbind('<B1-Motion>')
-            self.movement = 0
+            try:
+                nodeId = event.widget.gettags("current")[0]
+            except:
+                print("That is not the node or flow you wanted to move.")
+            else:
+                node = nodeClass.nodesDict[int(nodeId)]
+                node.xCoord = event.x
+                node.yCoord = event.y
+                print("The node was moved to:",event.x, event.y)
+        self.canvas.unbind('<B1-Motion>')
+        self.movement = 0
+
 
     def displayNodeMenu(self, event):
         if (self.nodeMenu != None):
@@ -50,7 +59,8 @@ class MyFirstGUI(tk.Frame):
         try:
             nodeID = event.widget.gettags("current")[0]
         except:
-            print("There is nothing there, add an object.")
+            pass   #writing error message in newNodePos function
+            #print("There is nothing there, add an object.")
         else:
             self.nodeMenu = tk.Menu(self.canvas, tearoff=0)
             self.nodeMenu.add_command(label="Move node", command=lambda: self.moveClick(nodeID))
@@ -61,46 +71,85 @@ class MyFirstGUI(tk.Frame):
             self.nodeMenu.post(x, y)
 
     def moveClick(self, nodeID):
+        node = nodeClass.nodesDict[int(nodeID)]
+        self.tempX = node.xCoord
+        self.tempY = node.yCoord
         self.canvas.bind('<B1-Motion>', lambda event: self.moveNode(event, nodeID))
         self.movement = 1
 
     def moveNode(self, event, nodeID):
-        obj = event.widget.gettags("current")[0]
-        if obj == nodeID:
-            newX = event.x - self.tempX
-            newY = event.y - self.tempY
-            self.canvas.move(nodeID, newX, newY)
-            self.tempX = event.x
-            self.tempY = event.y
+        try:
+            obj = event.widget.gettags("current")[0]
+        except:
+            self.canvas.unbind('<B1-Motion>')
+
+        else:
+            if obj == nodeID:
+                newX = event.x - self.tempX
+                newY = event.y - self.tempY
+                self.canvas.move(int(obj)+1, newX, newY)  #this comment is needed because as I understood it right now, you can't move an object tag 0.
+                self.tempX = event.x
+                self.tempY = event.y
 
     def editNode(self, nodeID):
-        print("EDIT ---:",nodeID)
+        # Main window for displaying node information
+        nodeInfo = tk.Toplevel(self)
+        nodeInfo.resizable(width=False, height=False)
+        nodeInfo.geometry('500x400')
+        nodeInfo.wm_title("Information about node")
+
+
+        # All the labels in the window.
+        inFlowLabel = tk.Label(nodeInfo, text="In flow").grid(row=1, column=0)
+        outFlowLabel = tk.Label(nodeInfo, text="Out flow").grid(row=1, column=2)
+
+        # A list of all the in flows of the displayed node
+        inFlows = tk.Listbox(nodeInfo, height=15)
+        inFlowScrollbar = tk.Scrollbar(nodeInfo, orient='vertical')
+        inFlowScrollbar.grid(row=2,column=0,sticky='nes')
+        inFlows.config(yscrollcommand=inFlowScrollbar.set)
+        inFlows.grid(row=2,column=0)
+        inFlowScrollbar.config(command=inFlows.yview)
+
+        inFlows.insert('end', "a list entry")
+        for item in range(0,23):
+            inFlows.insert('end', item)
+
+        # A list of all the out flows of the displayed node
+        outFlows = tk.Listbox(nodeInfo, height=15)
+        outFlowScrollbar = tk.Scrollbar(nodeInfo, orient='vertical')
+        outFlowScrollbar.grid(row=2,column=2,sticky='nes')
+        outFlows.config(yscrollcommand=outFlowScrollbar.set)
+        outFlows.grid(row=2,column=2)
+        outFlowScrollbar.config(command=outFlows.yview)
+
+        outFlows.insert('end', "a list outry")
+        for item in range (97,123):
+            outFlows.insert('end', chr(item))
+
+
 
     def deleteNode(self, nodeID):
         print("nodeType is:",nodeID)
         self.canvas.delete(nodeID)
 
-    def enter(self, event, check):
-        if (check == 1 and self.nodeType != None):
+    def enter(self, event):
+        if (self.check == 1 and self.nodeType != None):
             canvas = event.widget
             path = './frontend/images/' + self.nodeType + '.png'
-            self.photo = tk.PhotoImage(file = path)
-            self.tempNode = nodeClass.createNode(self.nodeType, self.photo, self.tempX, self.tempY)
-            print("added node:",self.tempNode, "          ", "nodeId:", self.tempNode.nodeId)
-            canvas.create_image(event.x, event.y, image = self.photo, tags = self.tempCounter)
-            self.tempCounter += 1
-        self.nodeType = None
+            photo = tk.PhotoImage(file = path)
+            self.tempNode = nodeClass.createNode(self.nodeType, photo, self.tempX, self.tempY)
+            canvas.create_image(event.x, event.y, image = photo, tags = self.tempNode.nodeId)
+        self.check = 0
+        self.tempNode = None
 
 
     def nodeDrop(self, event, node):
         self.tempX = root.winfo_pointerx() - root.winfo_rootx()-110  #this is the width of self.leftFrame.
         self.tempY = root.winfo_pointery() - root.winfo_rooty()-20 #the height of toplabel
         if not(self.tempY < 0 or self.tempY > 360 or self.tempX < 0 or self.tempX > 490):
-            print("node",node)
             self.check = 1
             self.nodeType = node
-        else:
-            self.check = 0
 
     def addNode(self,event):
         nodesWindow = tk.Toplevel(self)
