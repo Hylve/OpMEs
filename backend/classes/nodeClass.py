@@ -30,17 +30,29 @@ class nodeClass(object):
     deletedNodesList = []   # a list that contains all deleted node IDs
 
     @classmethod
-    def createNode(cls,nodeType, x=None, y=None):
+    def createNode(cls,nodeType, picture=None, x=None, y=None):
         ''' this class method dynamically creates instances (new nodes) '''
         if not cls.deletedNodesList: # if there is no deleted nodes
+<<<<<<< HEAD
             nodeId=len(nodeClass.nodesDict) # set node ID to the lenght to of the node dictionar
 
+=======
+            nodeId=len(nodeClass.nodesDict) # set node ID to the lenght to of the node dictionary
+            #if (len(nodeClass.nodesDict) == 0):
+            #    nodeId = 1
+            #else:
+            #    nodeId=len(nodeClass.nodesDict) # set node ID to the lenght to of the node dictionar
+>>>>>>> 4175ffe9d5802ad03d0e808abaaead46a13466bb
         else: # if there is deleted nodes
             cls.deletedNodesList.sort() #sort the list
             nodeId=cls.deletedNodesList[0] # set node id to the lowest ID (first in sorted)
             cls.deletedNodesList.pop(0) #remove first item in list
 
+<<<<<<< HEAD
         node=nodeClass(nodeId,nodeType,x,y) # create a node instance
+=======
+        node=nodeClass(nodeId,nodeType, picture, x,y) # createa node instance
+>>>>>>> 4175ffe9d5802ad03d0e808abaaead46a13466bb
         cls.nodesDict[nodeId]=node # append created instance to dictionary
         return node
 
@@ -51,7 +63,12 @@ class nodeClass(object):
         cls.deletedNodesList.append(nodeId) # Append the deleted nodes ID to a list
 
     # Constructor
+<<<<<<< HEAD
     def __init__(self, nodeId, nodeType, x, y): # add all the inputs in the init method use if statement if the vars is empty
+=======
+    def __init__(self, nodeId, nodeType, picture, x, y): # add all the inputs in the init method use if statement if the vars is empty
+        self.picture        = picture                   # set node picture.
+>>>>>>> 4175ffe9d5802ad03d0e808abaaead46a13466bb
         self.nodeId         = nodeId                    # set node ID.
         self.nodeName       = "NODE-"+str(self.nodeId)  # set the default node name to "NODE-nodeID".
         self.yCoord         = y                         # Y coordinate.
