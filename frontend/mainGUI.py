@@ -1,12 +1,19 @@
 #!/usr/bin/python3
+
+import sys              # To get the current pythonverion
+
 import tkinter as tk
+
+sys.path.append('./backend')
+from classes.nodeClass import nodeClass                 # import the node class
 
 class MyFirstGUI(tk.Frame):
     def __init__(self, master):
         #wtf?
         super(MyFirstGUI, self).__init__()
         self.movement = 0
-        self.tempCounter=1
+        self.tempCounter= 1
+        self.nodeType = None
         self.tempNode = None
         self.nodeMenu = None
 
@@ -29,9 +36,6 @@ class MyFirstGUI(tk.Frame):
         self.canvas.bind('<Button-3>', self.displayNodeMenu)
         self.canvas.bind('<ButtonRelease-1>', self.setMovement)
         self.canvas.pack(fill="both", expand=1, side="right")
-        self.canvScrollbar = tk.Scrollbar(self.canvas, orient="vertical", command=self.canvas.yview)
-        self.canvas.configure(yscrollcommand=self.canvScrollbar.set)
-        self.canvScrollbar.pack(side="right", fill="y")
         self.createWidgets()
 
     def setMovement(self, event):
@@ -77,22 +81,24 @@ class MyFirstGUI(tk.Frame):
         self.canvas.delete(nodeID)
 
     def enter(self, event, check):
-        if (check == 1 and self.tempNode != None):
+        if (check == 1 and self.nodeType != None):
             canvas = event.widget
-            path = './frontend/images/' + self.tempNode + '.png'
+            path = './frontend/images/' + self.nodeType + '.png'
             self.photo = tk.PhotoImage(file = path)
+            self.tempNode = nodeClass.createNode(self.nodeType, self.photo, self.tempX, self.tempY)
+            print("added node:",self.tempNode, "          ", "nodeId:", self.tempNode.nodeId)
             canvas.create_image(event.x, event.y, image = self.photo, tags = self.tempCounter)
-            #canvas.create_oval(event.x-20, event.y-20, event.x+20, event.y+20, fill=self.color, tag=self.tempCounter)
             self.tempCounter += 1
-        self.tempNode = None
+        self.nodeType = None
 
 
     def nodeDrop(self, event, node):
         self.tempX = root.winfo_pointerx() - root.winfo_rootx()-110  #this is the width of self.leftFrame.
         self.tempY = root.winfo_pointery() - root.winfo_rooty()-20 #the height of toplabel
         if not(self.tempY < 0 or self.tempY > 360 or self.tempX < 0 or self.tempX > 490):
+            print("node",node)
             self.check = 1
-            self.tempNode = node
+            self.nodeType = node
         else:
             self.check = 0
 
@@ -101,29 +107,26 @@ class MyFirstGUI(tk.Frame):
         nodesWindow.resizable(width=False, height=False)
         nodesWindow.wm_title("New Node")
 
-        node = tk.Button(nodesWindow, text = "Node")
-        node.bind('<ButtonRelease-1>', lambda event, node="normal": self.nodeDrop(event, node))
+        node = tk.Button(nodesWindow, text = "Normal node")
+        node.bind('<ButtonRelease-1>', lambda event, node="NODE": self.nodeDrop(event, node))
         node.grid(padx = 3, pady = 2,
                         row = 0, column = 0,
                         sticky = "NW"
                         )
 
-        srcNode = tk.Button(nodesWindow, text = "Source Node")
-        srcNode.bind('<ButtonRelease-1>', lambda event, node="source": self.nodeDrop(event, node))
+        srcNode = tk.Button(nodesWindow, text = "Source node")
+        srcNode.bind('<ButtonRelease-1>', lambda event, node="SOURCE": self.nodeDrop(event, node))
         srcNode.grid(padx = 3, pady = 2,
                             row = 1, column = 0,
                             sticky = "NW"
                             )
 
-        destNode = tk.Button(nodesWindow, text = "Destination Node")
-        destNode.bind('<ButtonRelease-1>', lambda event, node="destination": self.nodeDrop(event, node))
+        destNode = tk.Button(nodesWindow, text = "Destination node")
+        destNode.bind('<ButtonRelease-1>', lambda event, node="DESTINATION": self.nodeDrop(event, node))
         destNode.grid(padx = 3, pady = 2,
                             row = 2, column = 0,
                             sticky = "NW"
                             )
-
-        #dnd = DragManager()
-        #dnd.add_dragable(node)
 
 
     def createWidgets(self):
@@ -133,12 +136,12 @@ class MyFirstGUI(tk.Frame):
         self.nodeButton.grid(row = 0, column = 0, pady = 2, padx = 10, sticky = "N")
 
 
-
-root = tk.Tk()
-#root.minsize(300,300)
-#Resolution , x drawing point, y drawing point. x and  drawing point not needed.
-width = 600
-height = 400
-root.geometry("600x400+100+100")
-my_gui = MyFirstGUI(root)
-my_gui.mainloop()
+if __name__ == '__main__':
+    root = tk.Tk()
+    #root.minsize(300,300)
+    #Resolution , x drawing point, y drawing point. x and  drawing point not needed.
+    width = 600
+    height = 400
+    root.geometry("600x400+100+100")
+    my_gui = MyFirstGUI(root)
+    my_gui.mainloop()
