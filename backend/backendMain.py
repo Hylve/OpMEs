@@ -13,7 +13,6 @@ from classes.flowClass import flowClass                 # import the flow class
 from classes.constraintsClass import constraintsClass   # import the constraints class
 
 def createNodeFunction(nodeType):
-    print("work")
     # IS THIS FUNCTION NEEDED?
     '''
     docs for createNodeFunction:
